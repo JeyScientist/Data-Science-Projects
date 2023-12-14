@@ -1,0 +1,53 @@
+---------------------------------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  C:\Users\SCIENCE\Documents\stata13\logistic.log
+  log type:  text
+ opened on:   6 Dec 2023, 18:22:18
+
+. import delimited C:\Users\SCIENCE\Downloads\suv.csv
+(5 vars, 400 obs)
+. summarize age estimatedsalary purchased
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+         age |       400      37.655    10.48288         18         60
+estimateds~y |       400     69742.5    34096.96      15000     150000
+   purchased |       400       .3575     .479864          0          1
+
+. graph box purchased
+
+. histogram purchased
+(bin=20, start=0, width=.05)
+
+. histogram purchased, discrete
+(start=0, width=1)
+
+. histogram purchased, discrete
+(start=0, width=1)
+
+. melogit purchased age estimatedsalary
+
+Iteration 0:   log likelihood = -152.54423  
+Iteration 1:   log likelihood = -138.60067  
+Iteration 2:   log likelihood = -138.52579  
+Iteration 3:   log likelihood = -138.52569  
+Iteration 4:   log likelihood = -138.52569  
+
+Logistic regression                             Number of obs      =       400
+
+                                                Wald chi2(2)       =     86.58
+Log likelihood = -138.52569                     Prob > chi2        =    0.0000
+-----------------------------------------------------------------------------------
+        purchased |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------+----------------------------------------------------------------
+              age |   .2334894   .0259063     9.01   0.000      .182714    .2842649
+  estimatedsalary |   .0000359   5.43e-06     6.61   0.000     .0000253    .0000465
+            _cons |  -12.43399   1.299787    -9.57   0.000    -14.98152   -9.886452
+-----------------------------------------------------------------------------------
+
+. log close
+      name:  <unnamed>
+       log:  C:\Users\SCIENCE\Documents\stata13\logistic.log
+  log type:  text
+ closed on:   6 Dec 2023, 19:08:56
+---------------------------------------------------------------------------------------------------------------------------------------------
