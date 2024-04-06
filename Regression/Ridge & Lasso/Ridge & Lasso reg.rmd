@@ -1,0 +1,94 @@
+---
+title: "Ridge & Lasso reg"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+date: "2024-04-02"
+---
+The difference between Lasso and Ridge regression is lasso(alpha=1)
+```{r}
+df <- read.csv("C:/Users/SCIENCE/Documents/ndata.csv")
+df
+```
+```{r}
+library(glmnet)
+x <- data.matrix(df[,c("ORDERNUMBER", "QUANTITYORDERED", "PRICEEACH")])
+y<-df$SALES
+x
+```
+
+```{r}
+cv_model <- cv.glmnet(x,y,alpha=1)
+plot(cv_model)
+```
+```{r}
+lambda <- cv_model$lambda.min
+lambda
+```
+
+```{r}
+model <- glmnet(x,y,alpha=1)
+coef(model)
+```
+```{r}
+model1 <- glmnet(x,y,alpha=1, lambda=lambda)
+coef(model1)
+```
+```{r}
+library(caTools)
+data <- subset(df, select=c("SALES","ORDERNUMBER","QUANTITYORDERED","PRICEEACH"))
+set.seed(2)
+split <- sample.split(data, SplitRatio=0.7)
+train <- subset(data, split="TRUE")
+test <- subset(data, split="FALSE")
+test
+```
+```{r}
+linear <- glm(df$SALES~., data = train)
+pred <- predict(linear, newdata = test)
+plot(pred)
+```
+```{r}
+library(Metrics)
+rmse(pred, test$SALES)
+```
+```{r}
+summary(linear)
+```
+```{r}
+library(Metrics)
+pred1 <- predict(model1, x)
+rmse(pred1, y)
+```
+```{r}
+cv_model1 <- cv.glmnet(x,y,alpha=0)
+plot(cv_model1)
+```
+```{r}
+lambda1 <- cv_model1$lambda.min
+lambda1
+```
+```{r}
+model2 <- glmnet(x,y,alpha=1, lambda=lambda1)
+coef(model2)
+```
+```{r}
+library(Metrics)
+pred2 <- predict(model2, x)
+rmse(pred2, y)
+summary(pred2)
+```
+
+
+
+
+
+
+
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
